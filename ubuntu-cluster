@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+    config.vm.define "node1", primary: true do |node1|
+
+        node1.vm.box = "generic/ubuntu2004"
+        node1.vm.network "public_network", bridge: "Bridge"
+        node1.vm.synced_folder ".", "/vagrant_data", disabled: true
+        node1.vm.provider "hyperv"
+        node1.vm.hostname = "control.starfluxsolutions.com"
+
+        node1.vm.provider "hyperv" do |h|
+            h.enable_virtualization_extensions = false
+            h.linked_clone = true
+            h.cpus = 4
+            h.memory = 1024
+            h.maxmemory = 1024
+            h.vmname = "control"
+        end
+    end
+
+    config.vm.define "node2" do |node2|
+
+        node2.vm.box = "generic/ubuntu2004"
+        node2.vm.network "public_network", bridge: "Bridge"
+        node2.vm.synced_folder ".", "/vagrant_data", disabled: true
+        node2.vm.provider "hyperv"
+        node2.vm.hostname = "worker1.starfluxsolutions.com"
+
+        node2.vm.provider "hyperv" do |h|
+            h.enable_virtualization_extensions = false
+            h.linked_clone = true
+            h.cpus = 4
+            h.memory = 1024
+            h.maxmemory = 1024
+            h.vmname = "worker1"
+        end
+    end
+
+    config.vm.define "node3", primary: true do |node1|
+
+        node1.vm.box = "generic/ubuntu2004"
+        node1.vm.network "public_network", bridge: "Bridge"
+        node1.vm.synced_folder ".", "/vagrant_data", disabled: true
+        node1.vm.provider "hyperv"
+        node1.vm.hostname = "worker2.starfluxsolutions.com"
+
+        node1.vm.provider "hyperv" do |h|
+            h.enable_virtualization_extensions = false
+            h.linked_clone = true
+            h.cpus = 4
+            h.memory = 1024
+            h.maxmemory = 1024
+            h.vmname = "worker2"
+        end
+    end
+
+end
